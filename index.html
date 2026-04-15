@@ -157,7 +157,8 @@ async function loadProducts(showFeedback) {
     const prods = [];
     for (let i = 4; i < rows.length; i++) {
       const nome = rows[i][0]?.trim();
-      const prezzoRaw = rows[i][2]?.trim().replace(',', '.');
+      // Rimuove simbolo €, spazi, e converte virgola in punto
+      const prezzoRaw = rows[i][2]?.trim().replace('€', '').replace(/\s/g, '').replace(',', '.');
       const prezzo = parseFloat(prezzoRaw);
       if (nome && !isNaN(prezzo) && prezzo > 0) {
         prods.push({ name: nome, price: prezzo });
