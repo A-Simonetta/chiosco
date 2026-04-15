@@ -9,22 +9,22 @@
 :root {
   --green: #0F6E56; --green-mid: #1D9E75; --green-light: #9FE1CB; --green-pale: #E1F5EE;
   --amber: #BA7517; --amber-pale: #FAEEDA;
-  --red: #A32D2D; --red-pale: #FCEBEB;
+  --red: #A32D2D;
   --ink: #1C1C1A; --muted: #6B6A65; --border: #D5D3CC; --bg: #F6F4EF; --white: #FFFFFF;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); min-height: 100dvh; padding-bottom: 140px; }
 
-/* Header */
 header { background: var(--green); color: #fff; padding: 16px 20px 12px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; }
 header h1 { font-family: 'DM Serif Display', serif; font-size: 21px; font-weight: 400; }
 .cfg-btn { background: rgba(255,255,255,0.15); border: none; color: #fff; border-radius: 8px; padding: 6px 12px; font-size: 13px; font-family: inherit; cursor: pointer; }
 
-/* Banner */
+.sync-bar { background: var(--green-pale); border-bottom: 1px solid var(--green-light); padding: 8px 20px; font-size: 12px; color: var(--green); display: flex; align-items: center; justify-content: space-between; }
+.sync-bar button { background: var(--green); color: #fff; border: none; border-radius: 6px; padding: 4px 12px; font-size: 12px; font-family: inherit; cursor: pointer; }
+
 .banner { background: var(--amber-pale); border-bottom: 1px solid #e8c96e; padding: 10px 20px; font-size: 12px; color: var(--amber); display: flex; gap: 8px; align-items: center; }
 .banner a { color: var(--amber); font-weight: 600; cursor: pointer; }
 
-/* Products */
 .section-title { font-size: 11px; font-weight: 600; letter-spacing: 1.1px; color: var(--muted); text-transform: uppercase; padding: 18px 20px 10px; }
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 16px; }
 
@@ -35,12 +35,10 @@ header h1 { font-family: 'DM Serif Display', serif; font-size: 21px; font-weight
 .card-price { font-family: 'DM Serif Display', serif; font-size: 19px; color: var(--green); }
 .badge { position: absolute; top: 8px; right: 8px; background: var(--green); color: #fff; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(.5); transition: opacity .15s, transform .15s; pointer-events: none; }
 .card.on .badge { opacity: 1; transform: scale(1); }
-
 .stepper { display: flex; align-items: center; margin-top: 10px; background: rgba(29,158,117,.12); border-radius: 8px; overflow: hidden; }
 .step-btn { width: 34px; height: 30px; border: none; background: none; font-size: 20px; color: var(--green); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 300; }
 .step-n { flex: 1; text-align: center; font-size: 14px; font-weight: 600; color: var(--green); }
 
-/* Cart */
 .cart { position: fixed; bottom: 0; left: 0; right: 0; background: var(--white); border-top: 1px solid var(--border); padding: 12px 16px env(safe-area-inset-bottom, 16px); z-index: 200; transform: translateY(110%); transition: transform .2s; }
 .cart.show { transform: none; }
 .cart-head { display: flex; align-items: baseline; margin-bottom: 8px; }
@@ -52,30 +50,26 @@ header h1 { font-family: 'DM Serif Display', serif; font-size: 21px; font-weight
 .cl-name { flex: 1; }
 .cl-price { color: var(--green); font-weight: 500; margin: 0 8px; }
 .cl-rm { background: none; border: none; color: var(--muted); font-size: 17px; cursor: pointer; padding: 0 2px; }
-.send-btn { width: 100%; background: var(--green); color: #fff; border: none; border-radius: 12px; padding: 15px; font-family: inherit; font-size: 16px; font-weight: 600; cursor: pointer; transition: opacity .15s; }
+.send-btn { width: 100%; background: var(--green); color: #fff; border: none; border-radius: 12px; padding: 15px; font-family: inherit; font-size: 16px; font-weight: 600; cursor: pointer; }
 .send-btn:active { opacity: .8; }
 .send-btn:disabled { background: var(--border); color: var(--muted); cursor: default; }
 
-/* Toast */
 .toast { position: fixed; top: 72px; left: 50%; transform: translateX(-50%) translateY(-8px); background: var(--ink); color: #fff; padding: 9px 20px; border-radius: 30px; font-size: 13px; font-weight: 500; opacity: 0; transition: opacity .25s, transform .25s; z-index: 999; white-space: nowrap; pointer-events: none; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 .toast.ok { background: var(--green-mid); }
 .toast.err { background: var(--red); }
 
-/* Modal */
 .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 400; display: flex; align-items: flex-end; opacity: 0; pointer-events: none; transition: opacity .2s; }
 .overlay.open { opacity: 1; pointer-events: auto; }
-.sheet { background: var(--white); border-radius: 20px 20px 0 0; padding: 24px 20px max(24px, env(safe-area-inset-bottom)); width: 100%; max-height: 85dvh; overflow-y: auto; transform: translateY(40px); transition: transform .2s; }
+.sheet { background: var(--white); border-radius: 20px 20px 0 0; padding: 24px 20px max(24px, env(safe-area-inset-bottom)); width: 100%; transform: translateY(40px); transition: transform .2s; }
 .overlay.open .sheet { transform: none; }
 .sheet h2 { font-family: 'DM Serif Display', serif; font-size: 21px; margin-bottom: 6px; }
 .sheet p { font-size: 13px; color: var(--muted); margin-bottom: 18px; line-height: 1.55; }
 .field-label { font-size: 11px; font-weight: 600; letter-spacing: .5px; color: var(--muted); display: block; margin-bottom: 5px; text-transform: uppercase; }
 .field { width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; font-family: inherit; background: var(--bg); color: var(--ink); margin-bottom: 14px; }
 .field:focus { outline: none; border-color: var(--green-mid); }
-textarea.field { resize: vertical; min-height: 110px; }
 .save-btn { width: 100%; background: var(--green); color: #fff; border: none; border-radius: 12px; padding: 14px; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer; }
 .cancel-btn { width: 100%; background: none; border: none; color: var(--muted); font-size: 14px; padding: 12px; cursor: pointer; font-family: inherit; }
-
 .empty { grid-column: span 2; text-align: center; padding: 40px 20px; color: var(--muted); font-size: 14px; line-height: 1.6; }
 </style>
 </head>
@@ -89,6 +83,11 @@ textarea.field { resize: vertical; min-height: 110px; }
 <div class="banner" id="banner">
   ⚠ Configura il link di Google Sheets per inviare gli ordini —
   <a onclick="openModal()">Configura ora</a>
+</div>
+
+<div class="sync-bar" id="sync-bar" style="display:none">
+  <span id="sync-label">Prodotti da Google Sheets</span>
+  <button onclick="loadProducts()">↻ Aggiorna</button>
 </div>
 
 <div class="section-title">Prodotti</div>
@@ -108,46 +107,70 @@ textarea.field { resize: vertical; min-height: 110px; }
 <div class="overlay" id="overlay" onclick="maybeClose(event)">
   <div class="sheet">
     <h2>Impostazioni</h2>
-    <p>Incolla il link del tuo Google Apps Script. Aggiungi i prodotti uno per riga nel formato <strong>Nome, Prezzo</strong>.</p>
-
+    <p>Incolla il link del tuo Google Apps Script. I prodotti vengono caricati automaticamente dal foglio <strong>Prodotti</strong> in Google Sheets.</p>
     <label class="field-label">URL Google Apps Script</label>
     <input class="field" type="url" id="f-url" placeholder="https://script.google.com/macros/s/.../exec">
-
-    <label class="field-label">Prodotti (Nome, Prezzo — uno per riga)</label>
-    <textarea class="field" id="f-prods" placeholder="Acqua 0.5L, 1.50&#10;Coca-Cola, 2.50&#10;Caffè, 1.20"></textarea>
-
-    <button class="save-btn" onclick="saveModal()">Salva</button>
+    <button class="save-btn" onclick="saveModal()">Salva e carica prodotti</button>
     <button class="cancel-btn" onclick="closeModal()">Annulla</button>
   </div>
 </div>
 
 <script>
-const DEFAULT = [
-  {name:'Acqua 0.5L', price:1.50},
-  {name:'Coca-Cola 0.33L', price:2.50},
-  {name:'Caffè espresso', price:1.20},
-  {name:'Cornetto', price:1.50},
-  {name:'Succo di frutta', price:2.00},
-  {name:'Birra 0.33L', price:3.00},
-  {name:'Tramezzino', price:3.50},
-];
-
 let products = [], cart = {}, scriptUrl = '';
 
-function load() {
+// Carica configurazione salvata
+function init() {
   scriptUrl = localStorage.getItem('c_url') || '';
-  try { products = JSON.parse(localStorage.getItem('c_prods')) || DEFAULT; } catch { products = DEFAULT; }
-  document.getElementById('banner').style.display = scriptUrl ? 'none' : '';
-  render();
+  if (scriptUrl) {
+    document.getElementById('banner').style.display = 'none';
+    document.getElementById('sync-bar').style.display = '';
+    loadProducts();
+  } else {
+    renderGrid([]);
+  }
 }
 
-function render() {
+// Carica prodotti da Google Sheets tramite Apps Script
+async function loadProducts() {
+  if (!scriptUrl) return;
+  document.getElementById('sync-label').textContent = 'Caricamento…';
+  try {
+    // Google Apps Script con redirect — bisogna seguire i redirect
+    const res = await fetch(scriptUrl, { redirect: 'follow' });
+    const data = await res.json();
+    if (data.status === 'ok' && data.products.length) {
+      products = data.products;
+      localStorage.setItem('c_prods', JSON.stringify(products));
+      document.getElementById('sync-label').textContent = products.length + ' prodotti da Sheets';
+      renderGrid(products);
+    } else {
+      fallbackProducts();
+    }
+  } catch(e) {
+    // Se il fetch diretto fallisce per CORS, usa i prodotti salvati localmente
+    fallbackProducts();
+  }
+}
+
+function fallbackProducts() {
+  const saved = localStorage.getItem('c_prods');
+  if (saved) {
+    products = JSON.parse(saved);
+    document.getElementById('sync-label').textContent = products.length + ' prodotti (cache)';
+    renderGrid(products);
+  } else {
+    document.getElementById('sync-label').textContent = 'Impossibile caricare';
+    renderGrid([]);
+  }
+}
+
+function renderGrid(prods) {
   const g = document.getElementById('grid');
-  if (!products.length) {
-    g.innerHTML = '<div class="empty">Nessun prodotto.<br>Vai in ⚙ Impostazioni per aggiungerli.</div>';
+  if (!prods.length) {
+    g.innerHTML = '<div class="empty">Nessun prodotto trovato.<br>Controlla il link in ⚙ Impostazioni.</div>';
     return;
   }
-  g.innerHTML = products.map((p,i) => `
+  g.innerHTML = prods.map((p, i) => `
     <div class="card" id="c${i}" onclick="tap(${i})">
       <span class="badge" id="b${i}">1</span>
       <div class="card-name">${p.name}</div>
@@ -185,12 +208,12 @@ function adj(i, d) {
 
 function updateCart() {
   const keys = Object.keys(cart).filter(k => cart[k] > 0);
-  const tot = keys.reduce((s,k) => s + products[k].price * cart[k], 0);
-  const cnt = keys.reduce((s,k) => s + cart[k], 0);
+  const tot = keys.reduce((s, k) => s + products[k].price * cart[k], 0);
+  const cnt = keys.reduce((s, k) => s + cart[k], 0);
   const el = document.getElementById('cart');
   if (!keys.length) { el.classList.remove('show'); return; }
   el.classList.add('show');
-  document.getElementById('cart-count').textContent = cnt + (cnt===1?' articolo':' articoli');
+  document.getElementById('cart-count').textContent = cnt + (cnt === 1 ? ' articolo' : ' articoli');
   document.getElementById('cart-total').textContent = '€ ' + fmt(tot);
   document.getElementById('cart-lines').innerHTML = keys.map(k =>
     `<div class="cart-line">
@@ -215,19 +238,17 @@ async function sendOrder() {
     totale: +(products[k].price * cart[k]).toFixed(2)
   }));
 
-  const payload = {
-    tipo: 'VENDITA',
-    data: new Date().toLocaleDateString('it-IT'),
-    items,
-    totale: items.reduce((s,x) => s + x.totale, 0).toFixed(2)
-  };
-
   try {
     await fetch(scriptUrl, {
       method: 'POST',
       mode: 'no-cors',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(payload)
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tipo: 'VENDITA',
+        data: new Date().toLocaleDateString('it-IT'),
+        items,
+        totale: items.reduce((s, x) => s + x.totale, 0).toFixed(2)
+      })
     });
     toast('Ordine inviato ✓', 'ok');
     clearCart();
@@ -247,9 +268,9 @@ function clearCart() {
   updateCart();
 }
 
-function fmt(n) { return Number(n).toFixed(2).replace('.',','); }
+function fmt(n) { return Number(n).toFixed(2).replace('.', ','); }
 
-function toast(msg, type='') {
+function toast(msg, type = '') {
   const t = document.getElementById('toast');
   t.textContent = msg; t.className = 'toast show ' + type;
   setTimeout(() => t.className = 'toast', 2600);
@@ -257,7 +278,6 @@ function toast(msg, type='') {
 
 function openModal() {
   document.getElementById('f-url').value = scriptUrl;
-  document.getElementById('f-prods').value = products.map(p => p.name+', '+fmt(p.price)).join('\n');
   document.getElementById('overlay').classList.add('open');
 }
 function closeModal() { document.getElementById('overlay').classList.remove('open'); }
@@ -265,25 +285,16 @@ function maybeClose(e) { if (e.target === document.getElementById('overlay')) cl
 
 function saveModal() {
   const url = document.getElementById('f-url').value.trim();
-  const lines = document.getElementById('f-prods').value.trim().split('\n');
-  const prods = lines.map(l => {
-    const last = l.lastIndexOf(',');
-    if (last < 0) return null;
-    const name = l.slice(0, last).trim();
-    const price = parseFloat(l.slice(last+1).replace(',','.'));
-    return name && !isNaN(price) ? {name, price} : null;
-  }).filter(Boolean);
-
+  if (!url) { toast('Inserisci il link Apps Script', 'err'); return; }
   scriptUrl = url;
-  if (url) localStorage.setItem('c_url', url); else localStorage.removeItem('c_url');
-  if (prods.length) { products = prods; localStorage.setItem('c_prods', JSON.stringify(prods)); }
-
-  document.getElementById('banner').style.display = url ? 'none' : '';
-  cart = {}; closeModal(); render(); updateCart();
-  toast('Salvato ✓', 'ok');
+  localStorage.setItem('c_url', url);
+  document.getElementById('banner').style.display = 'none';
+  document.getElementById('sync-bar').style.display = '';
+  closeModal();
+  loadProducts();
 }
 
-load();
+init();
 </script>
 </body>
 </html>
