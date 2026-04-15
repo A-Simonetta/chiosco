@@ -464,31 +464,35 @@ function clearCart() {
   updateCart();
 }
 
+async function fetchScript(url) {
+  const proxy = 'https://corsproxy.io/?' + encodeURIComponent(url);
+  const res = await fetch(proxy);
+  return await res.json();
+}
+
 async function syncProducts() {
   const urlInput = document.getElementById('script-url').value.trim();
   const url = urlInput || scriptUrl;
-  if (!url) { showToast('Inserisci prima l\'URL', 'error'); return; }
+  if (!url) { showToast("Inserisci prima l'URL", 'error'); return; }
 
   const btn = document.getElementById('sync-btn');
   btn.disabled = true; btn.textContent = '↻ Caricamento…';
 
   try {
-    const res = await fetch(url, { method: 'GET' });
-    const data = await res.json();
-    if (data.status === 'ok' && data.products.length) {
+    const data = await fetchScript(url);
+    if (data.status === 'ok' && data.products && data.products.length) {
       const preview = document.getElementById('prod-preview');
       preview.innerHTML = data.products.map(p =>
         `<div class="prod-row"><span>${p.name}</span><span>€ ${Number(p.price).toFixed(2).replace('.',',')}</span></div>`
       ).join('');
       preview.style.display = 'block';
-      // Save temporarily for preview
       btn._syncedProducts = data.products;
-      showToast(`${data.products.length} prodotti trovati ✓`, 'success');
+      showToast(data.products.length + ' prodotti trovati ✓', 'success');
     } else {
       showToast('Nessun prodotto trovato', 'error');
     }
   } catch(e) {
-    showToast('Errore: controlla l\'URL', 'error');
+    showToast("Errore: controlla l'URL", 'error');
   }
   btn.disabled = false; btn.textContent = '↻ Sincronizza prodotti da Sheets';
 }
@@ -496,9 +500,8 @@ async function syncProducts() {
 async function syncProductsSilent() {
   if (!scriptUrl) return;
   try {
-    const res = await fetch(scriptUrl, { method: 'GET' });
-    const data = await res.json();
-    if (data.status === 'ok' && data.products.length) {
+    const data = await fetchScript(scriptUrl);
+    if (data.status === 'ok' && data.products && data.products.length) {
       products = data.products;
       localStorage.setItem('chiosco_products', JSON.stringify(products));
       renderProducts();
