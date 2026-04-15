@@ -135,15 +135,29 @@ async function loadProducts(showFeedback) {
   try {
     const res = await fetch(csvUrl);
     const text = await res.text();
-    const rows = text.trim().split('\n').map(r => r.split(','));
 
-    // Il CSV ha le stesse righe del foglio:
+    // Parser CSV che rispetta i campi tra virgolette (es. "1,50" non viene spezzato)
+    function parseCSV(str) {
+      return str.trim().split('\n').map(line => {
+        const cols = [];
+        let cur = '', inQ = false;
+        for (let c of line) {
+          if (c === '"') { inQ = !inQ; }
+          else if (c === ',' && !inQ) { cols.push(cur); cur = ''; }
+          else { cur += c; }
+        }
+        cols.push(cur);
+        return cols;
+      });
+    }
+    const rows = parseCSV(text);
+
     // riga 0 = titolo, 1 = sottotitolo, 2 = vuota, 3 = intestazioni, 4+ = dati
     // colonna A = nome (indice 0), colonna C = prezzo vendita (indice 2)
     const prods = [];
     for (let i = 4; i < rows.length; i++) {
-      const nome   = rows[i][0]?.replace(/^"|"$/g, '').trim();
-      const prezzoRaw = rows[i][2]?.replace(/^"|"$/g, '').replace(',', '.').trim();
+      const nome = rows[i][0]?.trim();
+      const prezzoRaw = rows[i][2]?.trim().replace(',', '.');
       const prezzo = parseFloat(prezzoRaw);
       if (nome && !isNaN(prezzo) && prezzo > 0) {
         prods.push({ name: nome, price: prezzo });
