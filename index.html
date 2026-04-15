@@ -4,73 +4,65 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Chiosco — Ordini</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --green: #0F6E56; --green-mid: #1D9E75; --green-light: #9FE1CB; --green-pale: #E1F5EE;
-  --amber: #BA7517; --amber-pale: #FAEEDA;
-  --red: #A32D2D;
-  --ink: #1C1C1A; --muted: #6B6A65; --border: #D5D3CC; --bg: #F6F4EF; --white: #FFFFFF;
+  --green:#0F6E56;--green-mid:#1D9E75;--green-light:#9FE1CB;--green-pale:#E1F5EE;
+  --amber:#BA7517;--amber-pale:#FAEEDA;--red:#A32D2D;
+  --ink:#1C1C1A;--muted:#6B6A65;--border:#D5D3CC;--bg:#F6F4EF;--white:#FFFFFF;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); min-height: 100dvh; padding-bottom: 140px; }
-
-header { background: var(--green); color: #fff; padding: 16px 20px 12px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; }
-header h1 { font-family: 'DM Serif Display', serif; font-size: 21px; font-weight: 400; }
-.cfg-btn { background: rgba(255,255,255,0.15); border: none; color: #fff; border-radius: 8px; padding: 6px 12px; font-size: 13px; font-family: inherit; cursor: pointer; }
-
-.sync-bar { background: var(--green-pale); border-bottom: 1px solid var(--green-light); padding: 8px 20px; font-size: 12px; color: var(--green); display: flex; align-items: center; justify-content: space-between; }
-.sync-bar button { background: var(--green); color: #fff; border: none; border-radius: 6px; padding: 4px 12px; font-size: 12px; font-family: inherit; cursor: pointer; }
-
-.banner { background: var(--amber-pale); border-bottom: 1px solid #e8c96e; padding: 10px 20px; font-size: 12px; color: var(--amber); display: flex; gap: 8px; align-items: center; }
-.banner a { color: var(--amber); font-weight: 600; cursor: pointer; }
-
-.section-title { font-size: 11px; font-weight: 600; letter-spacing: 1.1px; color: var(--muted); text-transform: uppercase; padding: 18px 20px 10px; }
-.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 16px; }
-
-.card { background: var(--white); border-radius: 14px; border: 1.5px solid var(--border); padding: 14px 12px 12px; cursor: pointer; position: relative; transition: border-color .15s, background .15s; user-select: none; }
-.card:active { transform: scale(0.97); }
-.card.on { border-color: var(--green-mid); background: var(--green-pale); }
-.card-name { font-size: 14px; font-weight: 500; line-height: 1.3; margin-bottom: 6px; }
-.card-price { font-family: 'DM Serif Display', serif; font-size: 19px; color: var(--green); }
-.badge { position: absolute; top: 8px; right: 8px; background: var(--green); color: #fff; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(.5); transition: opacity .15s, transform .15s; pointer-events: none; }
-.card.on .badge { opacity: 1; transform: scale(1); }
-.stepper { display: flex; align-items: center; margin-top: 10px; background: rgba(29,158,117,.12); border-radius: 8px; overflow: hidden; }
-.step-btn { width: 34px; height: 30px; border: none; background: none; font-size: 20px; color: var(--green); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 300; }
-.step-n { flex: 1; text-align: center; font-size: 14px; font-weight: 600; color: var(--green); }
-
-.cart { position: fixed; bottom: 0; left: 0; right: 0; background: var(--white); border-top: 1px solid var(--border); padding: 12px 16px env(safe-area-inset-bottom, 16px); z-index: 200; transform: translateY(110%); transition: transform .2s; }
-.cart.show { transform: none; }
-.cart-head { display: flex; align-items: baseline; margin-bottom: 8px; }
-.cart-count { font-size: 13px; color: var(--muted); }
-.cart-total { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--green); margin-left: auto; }
-.cart-lines { max-height: 100px; overflow-y: auto; margin-bottom: 10px; }
-.cart-line { display: flex; align-items: center; font-size: 13px; padding: 3px 0; border-bottom: 1px solid var(--border); }
-.cart-line:last-child { border: none; }
-.cl-name { flex: 1; }
-.cl-price { color: var(--green); font-weight: 500; margin: 0 8px; }
-.cl-rm { background: none; border: none; color: var(--muted); font-size: 17px; cursor: pointer; padding: 0 2px; }
-.send-btn { width: 100%; background: var(--green); color: #fff; border: none; border-radius: 12px; padding: 15px; font-family: inherit; font-size: 16px; font-weight: 600; cursor: pointer; }
-.send-btn:active { opacity: .8; }
-.send-btn:disabled { background: var(--border); color: var(--muted); cursor: default; }
-
-.toast { position: fixed; top: 72px; left: 50%; transform: translateX(-50%) translateY(-8px); background: var(--ink); color: #fff; padding: 9px 20px; border-radius: 30px; font-size: 13px; font-weight: 500; opacity: 0; transition: opacity .25s, transform .25s; z-index: 999; white-space: nowrap; pointer-events: none; }
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-.toast.ok { background: var(--green-mid); }
-.toast.err { background: var(--red); }
-
-.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 400; display: flex; align-items: flex-end; opacity: 0; pointer-events: none; transition: opacity .2s; }
-.overlay.open { opacity: 1; pointer-events: auto; }
-.sheet { background: var(--white); border-radius: 20px 20px 0 0; padding: 24px 20px max(24px, env(safe-area-inset-bottom)); width: 100%; transform: translateY(40px); transition: transform .2s; }
-.overlay.open .sheet { transform: none; }
-.sheet h2 { font-family: 'DM Serif Display', serif; font-size: 21px; margin-bottom: 6px; }
-.sheet p { font-size: 13px; color: var(--muted); margin-bottom: 18px; line-height: 1.55; }
-.field-label { font-size: 11px; font-weight: 600; letter-spacing: .5px; color: var(--muted); display: block; margin-bottom: 5px; text-transform: uppercase; }
-.field { width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; font-family: inherit; background: var(--bg); color: var(--ink); margin-bottom: 14px; }
-.field:focus { outline: none; border-color: var(--green-mid); }
-.save-btn { width: 100%; background: var(--green); color: #fff; border: none; border-radius: 12px; padding: 14px; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer; }
-.cancel-btn { width: 100%; background: none; border: none; color: var(--muted); font-size: 14px; padding: 12px; cursor: pointer; font-family: inherit; }
-.empty { grid-column: span 2; text-align: center; padding: 40px 20px; color: var(--muted); font-size: 14px; line-height: 1.6; }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100dvh;padding-bottom:150px}
+header{background:var(--green);color:#fff;padding:16px 20px 12px;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between}
+header h1{font-family:'DM Serif Display',serif;font-size:21px;font-weight:400}
+.cfg-btn{background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:8px;padding:6px 12px;font-size:13px;font-family:inherit;cursor:pointer}
+.banner{background:var(--amber-pale);border-bottom:1px solid #e8c96e;padding:10px 20px;font-size:12px;color:var(--amber);display:flex;gap:8px;align-items:center}
+.banner a{color:var(--amber);font-weight:600;cursor:pointer}
+.sync-bar{background:var(--green-pale);border-bottom:1px solid var(--green-light);padding:8px 20px;font-size:12px;color:var(--green);display:flex;align-items:center;justify-content:space-between}
+.sync-bar button{background:var(--green);color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:12px;font-family:inherit;cursor:pointer}
+.section-title{font-size:11px;font-weight:600;letter-spacing:1.1px;color:var(--muted);text-transform:uppercase;padding:18px 20px 10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px}
+.card{background:var(--white);border-radius:14px;border:1.5px solid var(--border);padding:14px 12px 12px;cursor:pointer;position:relative;transition:border-color .15s,background .15s;user-select:none}
+.card:active{transform:scale(.97)}
+.card.on{border-color:var(--green-mid);background:var(--green-pale)}
+.card-name{font-size:14px;font-weight:500;line-height:1.3;margin-bottom:6px}
+.card-price{font-family:'DM Serif Display',serif;font-size:19px;color:var(--green)}
+.badge{position:absolute;top:8px;right:8px;background:var(--green);color:#fff;border-radius:50%;width:22px;height:22px;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.5);transition:opacity .15s,transform .15s;pointer-events:none}
+.card.on .badge{opacity:1;transform:scale(1)}
+.stepper{display:flex;align-items:center;margin-top:10px;background:rgba(29,158,117,.12);border-radius:8px;overflow:hidden}
+.step-btn{width:34px;height:30px;border:none;background:none;font-size:20px;color:var(--green);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-n{flex:1;text-align:center;font-size:14px;font-weight:600;color:var(--green)}
+.cart{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid var(--border);padding:12px 16px env(safe-area-inset-bottom,16px);z-index:200;transform:translateY(110%);transition:transform .2s}
+.cart.show{transform:none}
+.cart-head{display:flex;align-items:baseline;margin-bottom:8px}
+.cart-count{font-size:13px;color:var(--muted)}
+.cart-total{font-family:'DM Serif Display',serif;font-size:22px;color:var(--green);margin-left:auto}
+.cart-lines{max-height:100px;overflow-y:auto;margin-bottom:10px}
+.cart-line{display:flex;align-items:center;font-size:13px;padding:3px 0;border-bottom:1px solid var(--border)}
+.cart-line:last-child{border:none}
+.cl-name{flex:1}
+.cl-price{color:var(--green);font-weight:500;margin:0 8px}
+.cl-rm{background:none;border:none;color:var(--muted);font-size:17px;cursor:pointer;padding:0 2px}
+.send-btn{width:100%;background:var(--green);color:#fff;border:none;border-radius:12px;padding:15px;font-family:inherit;font-size:16px;font-weight:600;cursor:pointer}
+.send-btn:active{opacity:.8}
+.send-btn:disabled{background:var(--border);color:var(--muted);cursor:default}
+.toast{position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-8px);background:var(--ink);color:#fff;padding:9px 20px;border-radius:30px;font-size:13px;font-weight:500;opacity:0;transition:opacity .25s,transform .25s;z-index:999;white-space:nowrap;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{background:var(--green-mid)}
+.toast.err{background:var(--red)}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:400;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .2s}
+.overlay.open{opacity:1;pointer-events:auto}
+.sheet{background:var(--white);border-radius:20px 20px 0 0;padding:24px 20px max(24px,env(safe-area-inset-bottom));width:100%;transform:translateY(40px);transition:transform .2s}
+.overlay.open .sheet{transform:none}
+.sheet h2{font-family:'DM Serif Display',serif;font-size:21px;margin-bottom:6px}
+.sheet p{font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.55}
+.field-label{font-size:11px;font-weight:600;letter-spacing:.5px;color:var(--muted);display:block;margin-bottom:5px;text-transform:uppercase}
+.field{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;background:var(--bg);color:var(--ink);margin-bottom:14px}
+.field:focus{outline:none;border-color:var(--green-mid)}
+.save-btn{width:100%;background:var(--green);color:#fff;border:none;border-radius:12px;padding:14px;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer}
+.cancel-btn{width:100%;background:none;border:none;color:var(--muted);font-size:14px;padding:12px;cursor:pointer;font-family:inherit}
+.empty{grid-column:span 2;text-align:center;padding:40px 20px;color:var(--muted);font-size:14px;line-height:1.6}
+.hint{font-size:11px;color:var(--muted);margin-top:-10px;margin-bottom:14px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -81,13 +73,13 @@ header h1 { font-family: 'DM Serif Display', serif; font-size: 21px; font-weight
 </header>
 
 <div class="banner" id="banner">
-  ⚠ Configura il link di Google Sheets per inviare gli ordini —
+  ⚠ Configura i link per attivare l'app —
   <a onclick="openModal()">Configura ora</a>
 </div>
 
 <div class="sync-bar" id="sync-bar" style="display:none">
   <span id="sync-label">Prodotti da Google Sheets</span>
-  <button onclick="loadProducts()">↻ Aggiorna</button>
+  <button onclick="loadProducts(true)">↻ Aggiorna</button>
 </div>
 
 <div class="section-title">Prodotti</div>
@@ -107,67 +99,83 @@ header h1 { font-family: 'DM Serif Display', serif; font-size: 21px; font-weight
 <div class="overlay" id="overlay" onclick="maybeClose(event)">
   <div class="sheet">
     <h2>Impostazioni</h2>
-    <p>Incolla il link del tuo Google Apps Script. I prodotti vengono caricati automaticamente dal foglio <strong>Prodotti</strong> in Google Sheets.</p>
-    <label class="field-label">URL Google Apps Script</label>
+    <p>Servono due link da Google: uno per leggere i prodotti (CSV), uno per inviare gli ordini (Apps Script).</p>
+
+    <label class="field-label">Link CSV foglio Prodotti</label>
+    <input class="field" type="url" id="f-csv" placeholder="https://docs.google.com/spreadsheets/d/.../pub?...output=csv">
+    <p class="hint">Sheets → File → Condividi → Pubblica sul Web → foglio "Prodotti" → formato CSV → copia link</p>
+
+    <label class="field-label">URL Google Apps Script (per inviare ordini)</label>
     <input class="field" type="url" id="f-url" placeholder="https://script.google.com/macros/s/.../exec">
+
     <button class="save-btn" onclick="saveModal()">Salva e carica prodotti</button>
     <button class="cancel-btn" onclick="closeModal()">Annulla</button>
   </div>
 </div>
 
 <script>
-let products = [], cart = {}, scriptUrl = '';
+let products = [], cart = {}, scriptUrl = '', csvUrl = '';
 
-// Carica configurazione salvata
 function init() {
   scriptUrl = localStorage.getItem('c_url') || '';
-  if (scriptUrl) {
+  csvUrl    = localStorage.getItem('c_csv') || '';
+  if (csvUrl && scriptUrl) {
     document.getElementById('banner').style.display = 'none';
     document.getElementById('sync-bar').style.display = '';
-    loadProducts();
+    loadProducts(false);
   } else {
     renderGrid([]);
   }
 }
 
-// Carica prodotti da Google Sheets tramite Apps Script
-async function loadProducts() {
-  if (!scriptUrl) return;
+// Legge il CSV pubblicato — nessun problema di CORS
+async function loadProducts(showFeedback) {
+  if (!csvUrl) return;
   document.getElementById('sync-label').textContent = 'Caricamento…';
   try {
-    // Google Apps Script con redirect — bisogna seguire i redirect
-    const res = await fetch(scriptUrl, { redirect: 'follow' });
-    const data = await res.json();
-    if (data.status === 'ok' && data.products.length) {
-      products = data.products;
-      localStorage.setItem('c_prods', JSON.stringify(products));
-      document.getElementById('sync-label').textContent = products.length + ' prodotti da Sheets';
-      renderGrid(products);
+    const res = await fetch(csvUrl);
+    const text = await res.text();
+    const rows = text.trim().split('\n').map(r => r.split(','));
+
+    // Il CSV ha le stesse righe del foglio:
+    // riga 0 = titolo, 1 = sottotitolo, 2 = vuota, 3 = intestazioni, 4+ = dati
+    // colonna A = nome (indice 0), colonna C = prezzo vendita (indice 2)
+    const prods = [];
+    for (let i = 4; i < rows.length; i++) {
+      const nome   = rows[i][0]?.replace(/^"|"$/g, '').trim();
+      const prezzoRaw = rows[i][2]?.replace(/^"|"$/g, '').replace(',', '.').trim();
+      const prezzo = parseFloat(prezzoRaw);
+      if (nome && !isNaN(prezzo) && prezzo > 0) {
+        prods.push({ name: nome, price: prezzo });
+      }
+    }
+
+    if (prods.length) {
+      products = prods;
+      localStorage.setItem('c_prods', JSON.stringify(prods));
+      document.getElementById('sync-label').textContent = prods.length + ' prodotti da Sheets';
+      if (showFeedback) toast(prods.length + ' prodotti aggiornati ✓', 'ok');
     } else {
-      fallbackProducts();
+      throw new Error('nessun prodotto');
     }
   } catch(e) {
-    // Se il fetch diretto fallisce per CORS, usa i prodotti salvati localmente
-    fallbackProducts();
+    // Fallback alla cache
+    const saved = localStorage.getItem('c_prods');
+    if (saved) {
+      products = JSON.parse(saved);
+      document.getElementById('sync-label').textContent = products.length + ' prodotti (cache)';
+    } else {
+      document.getElementById('sync-label').textContent = 'Errore caricamento';
+      if (showFeedback) toast('Controlla il link CSV', 'err');
+    }
   }
-}
-
-function fallbackProducts() {
-  const saved = localStorage.getItem('c_prods');
-  if (saved) {
-    products = JSON.parse(saved);
-    document.getElementById('sync-label').textContent = products.length + ' prodotti (cache)';
-    renderGrid(products);
-  } else {
-    document.getElementById('sync-label').textContent = 'Impossibile caricare';
-    renderGrid([]);
-  }
+  renderGrid(products);
 }
 
 function renderGrid(prods) {
   const g = document.getElementById('grid');
   if (!prods.length) {
-    g.innerHTML = '<div class="empty">Nessun prodotto trovato.<br>Controlla il link in ⚙ Impostazioni.</div>';
+    g.innerHTML = '<div class="empty">Nessun prodotto.<br>Vai in ⚙ Impostazioni e configura i link.</div>';
     return;
   }
   g.innerHTML = prods.map((p, i) => `
@@ -208,9 +216,9 @@ function adj(i, d) {
 
 function updateCart() {
   const keys = Object.keys(cart).filter(k => cart[k] > 0);
-  const tot = keys.reduce((s, k) => s + products[k].price * cart[k], 0);
-  const cnt = keys.reduce((s, k) => s + cart[k], 0);
-  const el = document.getElementById('cart');
+  const tot  = keys.reduce((s, k) => s + products[k].price * cart[k], 0);
+  const cnt  = keys.reduce((s, k) => s + cart[k], 0);
+  const el   = document.getElementById('cart');
   if (!keys.length) { el.classList.remove('show'); return; }
   el.classList.add('show');
   document.getElementById('cart-count').textContent = cnt + (cnt === 1 ? ' articolo' : ' articoli');
@@ -234,8 +242,8 @@ async function sendOrder() {
   const items = keys.map(k => ({
     prodotto: products[k].name,
     quantita: cart[k],
-    prezzo: products[k].price,
-    totale: +(products[k].price * cart[k]).toFixed(2)
+    prezzo:   products[k].price,
+    totale:   +(products[k].price * cart[k]).toFixed(2)
   }));
 
   try {
@@ -277,6 +285,7 @@ function toast(msg, type = '') {
 }
 
 function openModal() {
+  document.getElementById('f-csv').value = csvUrl;
   document.getElementById('f-url').value = scriptUrl;
   document.getElementById('overlay').classList.add('open');
 }
@@ -284,14 +293,16 @@ function closeModal() { document.getElementById('overlay').classList.remove('ope
 function maybeClose(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
 
 function saveModal() {
+  const csv = document.getElementById('f-csv').value.trim();
   const url = document.getElementById('f-url').value.trim();
-  if (!url) { toast('Inserisci il link Apps Script', 'err'); return; }
-  scriptUrl = url;
+  if (!csv || !url) { toast('Inserisci entrambi i link', 'err'); return; }
+  csvUrl = csv; scriptUrl = url;
+  localStorage.setItem('c_csv', csv);
   localStorage.setItem('c_url', url);
   document.getElementById('banner').style.display = 'none';
   document.getElementById('sync-bar').style.display = '';
   closeModal();
-  loadProducts();
+  loadProducts(true);
 }
 
 init();
